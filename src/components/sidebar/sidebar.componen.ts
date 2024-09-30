@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import * as bootstrap from 'bootstrap';
+import { UserService } from 'src/app/adapters/user.repository.adapter';
+import { User } from 'src/app/model/user';
 
 @Component({
   selector: 'app-navbar',
@@ -30,21 +33,22 @@ import * as bootstrap from 'bootstrap';
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <small>Hola, Inicia Sesión</small><br>
+                <small *ngIf="currentUser">Hola, {{ currentUser.name }}</small><br>
                 <strong>Cuenta</strong>
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Iniciar Sesión</a></li>
+                <li><a class="dropdown-item" (click)="navigateToLogin()">Iniciar Sesión</a></li>
+                <li><a class="dropdown-item" (click)="logout()">Cerrar Sesión</a></li>
               </ul>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#">
+            <li class="nav-item" (click)="navigateToCart()">
+              <a class="nav-link text-white" href="/cart">
                 <small>Carrito</small><br>
                 <strong>y Pedidos</strong>
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#">
+            <li class="nav-item" (click)="navigateToCart()">
+              <a class="nav-link text-white" href="/cart">
                 <i class="bi bi-cart3 fs-4"></i>
               </a>
             </li>
@@ -52,14 +56,17 @@ import * as bootstrap from 'bootstrap';
         </div>
       </div>
     </nav>
-    <div class="bg-secondary py-1">
-      <div class="container-fluid">
+    <div style="background-color: #343a40; color: white;" class="py-1">
+            <div class="container-fluid">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link text-white" href="#"><i class="bi bi-list me-2"></i>Todo</a>
+            <a class="nav-link text-white" (click)="goToProducts()" href="/products"><i class="bi bi-list me-2"></i>Todo</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#">Ofertas del Día</a>
+            <a class="nav-link text-white" (click)="goToProducts()" href="/products">Ofertas del Día</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" (click)="goToFounds()" href="/founds">Añadir Fondos</a>
           </li>
         </ul>
       </div>
@@ -78,11 +85,39 @@ import * as bootstrap from 'bootstrap';
   `]
 })
 export class NavbarComponent implements OnInit {
+  currentUser: User | null = null;
+
+  constructor(private router: Router, private userService: UserService) { }
+
   ngOnInit() {
-    // Inicializar todos los dropdowns
+    this.userService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+    });
+
     const dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
     dropdownElementList.map(function (dropdownToggleEl) {
       return new bootstrap.Dropdown(dropdownToggleEl);
     });
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
+  }
+
+  logout() {
+    this.userService.logout();
+    this.router.navigate(['/login']);
+  }
+
+  navigateToCart() {
+    this.router.navigate(['/cart']);
+  }
+
+  goToProducts() {
+    this.router.navigate(['/products']);
+  }
+
+  goToFounds() {
+    this.router.navigate(['/founds']);
   }
 }

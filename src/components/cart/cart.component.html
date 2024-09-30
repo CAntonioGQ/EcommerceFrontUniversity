@@ -1,0 +1,190 @@
+<div class="cart-container">
+    <h2>Carrito de Compras</h2>
+    
+    <div *ngIf="loading" class="loading">Cargando carrito...</div>
+  
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+  
+    <div *ngIf="!loading && !error">
+      <div *ngIf="cartItems.length === 0" class="empty-cart">
+        <p>El carrito está vacío.</p>
+        <a routerLink="/products" class="continue-shopping">Continuar comprando</a>
+      </div>
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <img [src]="item.urlImage" [alt]="item.name" class="cart-item-image">
+        <div class="cart-item-details">
+          <h3>{{ item.name }}</h3>
+          <p class="item-price">{{ (item.price) | currency:'MXN':'symbol':'1.2-2' }}</p>
+          <p>Descripción: {{ item.description }}</p>
+        </div>
+        <button (click)="removeFromCart(item)" class="remove-button" title="Eliminar producto">
+          <span class="remove-icon">×</span>
+        </button>
+      </div>
+      <div *ngIf="cartItems.length > 0" class="cart-total">
+        <h3>Total: {{ getTotal() | currency:'USD':'symbol':'1.2-2' }}</h3>
+        <button 
+        (click)="processOrder()" 
+        class="checkout-button" 
+        [disabled]="loading || !isLoggedIn"
+        [title]="!isLoggedIn ? 'Inicia sesión para comprar' : ''"
+      >
+        {{ loading ? 'Procesando...' : (isLoggedIn ? 'Proceder al pago' : 'Iniciar sesión para comprar') }}
+      </button>
+        <p *ngIf="!isLoggedIn" class="login-message">
+          Debes iniciar sesión para realizar la compra.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Estilos del componente -->
+  <style>
+.cart-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.cart-item:hover {
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 15px;
+  border-radius: 4px;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-details h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #4a4a4a;
+}
+
+.remove-button {
+  background-color: transparent;
+  border: none;
+  color: #ff4d4d;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.remove-button:hover {
+  transform: scale(1.1);
+  color: #ff0000;
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.remove-icon {
+  line-height: 1;
+}
+
+.cart-total {
+  margin-top: 20px;
+  text-align: right;
+  padding-top: 15px;
+  border-top: 2px solid #e0e0e0;
+}
+
+.cart-total h3 {
+  margin-bottom: 15px;
+}
+
+.checkout-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-button:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.checkout-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.continue-shopping {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.continue-shopping:hover {
+  background-color: #0056b3;
+}
+
+.loading, .error-message {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.error-message {
+  color: #ff4d4d;
+}
+
+.insufficient-funds {
+  color: #ff4d4d;
+  margin-top: 10px;
+}
+
+.login-message {
+  color: #007bff;
+  margin-top: 10px;
+}
+  </style>

@@ -5,14 +5,14 @@ export class Product{
     static PENDING = 4;
     static DELETE = 99;
 
-    private idProduct: number | undefined;
-    private name: string | undefined;
-    private price: number | undefined;
-    private urlImage: string | undefined;
-    private description: string | undefined;
-    private status: number | undefined;
-    private createdAt: Date | undefined;
-    private updatedAt: Date | undefined;
+    public idProduct: number | undefined;
+    public name: string | undefined;
+    public price: number | undefined;
+    public urlImage: string | undefined;
+    public description: string | undefined;
+    public status: number | undefined;
+    public createdAt: Date | undefined;
+    public updatedAt: Date | undefined;
 
     public get getIdProduct(): number | undefined{
         return this.idProduct;

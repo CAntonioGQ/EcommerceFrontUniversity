@@ -1,5 +1,6 @@
 // main-page.component.ts
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProductService } from 'src/app/adapters/product.repository.adapter';
 import { Product } from 'src/app/model/product';
 
@@ -41,7 +42,7 @@ export class MainPageComponent implements OnInit {
     }
   ];
 
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService, private router: Router) {}
 
   ngOnInit() {
     this.loadProducts();
@@ -63,10 +64,8 @@ export class MainPageComponent implements OnInit {
     );
   }
 
-  addToCart(product: Product) {
-    // Aquí implementarías la lógica para añadir al carrito
-    console.log(`Producto añadido al carrito: ${product.getName}`);
-    // Por ejemplo, podrías llamar a un método de un servicio de carrito
-    // this.cartService.addItem(product);
+
+  goToProducts() {
+    this.router.navigate(['/products']);
   }
 }

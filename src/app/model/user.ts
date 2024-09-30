@@ -5,10 +5,11 @@ export class User{
     static PENDING = 4;
     static DELETE = 99;
 
-    private idUser: number | undefined;
-    private name: string | undefined;
-    private email: string | undefined;
-    private status: number | undefined;
+    public idUser: number | undefined;
+    public name: string | undefined;
+    public email: string | undefined;
+    public password: string | undefined;
+    public status: number | undefined;
 
     public get getIdUser(): number | undefined{
         return this.idUser;
@@ -27,6 +28,12 @@ export class User{
     }
     public set setEmail(email: string | undefined){
         this.email = email;
+    }
+    public get getPassword(): string | undefined{
+        return this.password;
+    }
+    public set setPassword(password: string | undefined){
+        this.password = password;
     }
     public get getStatus(): number | undefined{
         return this.status;

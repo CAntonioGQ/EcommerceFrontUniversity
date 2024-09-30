@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Purchase } from '../model/purchase';
+import { Product } from '../model/product';
 
 @Injectable({
   providedIn: 'root'
@@ -26,5 +27,7 @@ export class PurchaseService {
   updatePurchase(id: number, purchase: Partial<Purchase>): Observable<Purchase> {
     return this.http.put<Purchase>(`${this.apiUrl}/${id}`, purchase);
   }
-  
+  processOrder(idUser: number, products: Product[], total: number): Observable<Purchase> {
+    return this.http.post<Purchase>(this.apiUrl, { idUser, products, total });
+  }
 }

@@ -1,0 +1,96 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card credit-card">
+          <div class="card-body">
+            <h2 class="text-center mb-4">Agregar Fondos</h2>
+            
+            <div *ngIf="!currentUser" class="alert alert-warning">
+              Usuario no autenticado. Por favor, <a routerLink="/login">inicie sesión</a> para agregar fondos.
+            </div>
+  
+            <form *ngIf="currentUser" [formGroup]="addFoundsForm" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <label for="digits" class="form-label">Dígitos de la Tarjeta</label>
+                <input type="text" id="digits" class="form-control" formControlName="digits" placeholder="Ingresa los 16 dígitos" maxlength="16">
+                <div *ngIf="addFoundsForm.get('digits')?.invalid && addFoundsForm.get('digits')?.touched" class="text-danger">
+                  ¡Ingresa un número de tarjeta válido!
+                </div>
+              </div>
+  
+              <div class="mb-3">
+                <label for="cvv" class="form-label">CVV</label>
+                <input type="text" id="cvv" class="form-control" formControlName="cvv" placeholder="Ingresa el CVV" maxlength="3">
+                <div *ngIf="addFoundsForm.get('cvv')?.invalid && addFoundsForm.get('cvv')?.touched" class="text-danger">
+                  ¡Ingresa un CVV válido!
+                </div>
+              </div>
+  
+              <div class="mb-3">
+                <label for="funds" class="form-label">Monto</label>
+                <input type="number" id="funds" class="form-control" formControlName="funds" placeholder="Ingresa el monto" maxlength="10">
+                <div *ngIf="addFoundsForm.get('funds')?.invalid && addFoundsForm.get('funds')?.touched" class="text-danger">
+                  ¡Ingresa un monto válido!
+                </div>
+              </div>
+  
+              <button type="submit" class="btn btn-warning w-100" [disabled]="addFoundsForm.invalid || loading">
+                {{ loading ? 'Procesando...' : 'Agregar Fondos' }}
+              </button>
+            </form>
+  
+            <div *ngIf="success" class="alert alert-success mt-3">
+              {{ success }}
+            </div>
+  
+            <div *ngIf="error" class="alert alert-danger mt-3">
+              {{ error }}
+            </div>
+  
+            <div class="text-center mt-3">
+              <p>¿Tienes dudas? <a href="#">Contáctanos</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <style>
+    .credit-card {
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+    }
+    
+    .credit-card .form-control {
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      transition: border-color 0.3s;
+    }
+  
+    .credit-card .form-control:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+  
+    .credit-card h2 {
+      color: #333;
+    }
+  
+    .btn-warning {
+      background-color: #ffcc00;
+      border: none;
+    }
+  
+    .btn-warning:hover {
+      background-color: #e6b800;
+    }
+  
+    .text-danger {
+      font-size: 0.9rem;
+    }
+  </style>
+  
